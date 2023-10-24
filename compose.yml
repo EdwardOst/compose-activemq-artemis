@@ -1,0 +1,35 @@
+name: artemis
+services:
+
+  artemis_server:
+    image: ${ARTEMIS_IMAGE}:${ARTEMIS_VERSION}
+    restart: always
+    environment:
+      - ARTEMIS_USER
+      - ARTEMIS_PASSWORD
+    expose:
+      - ${ARTEMIS_CONTAINER_PORT}
+      - ${ARTEMIS_CONSOLE_CONTAINER_PORT}
+    ports:
+      - target: ${ARTEMIS_CONTAINER_PORT}
+        published: ${ARTEMIS_HOST_PORT}
+        host_ip: ${ARTEMIS_HOST_IP}
+        protocol: tcp
+        mode: host
+      - target: ${ARTEMIS_CONSOLE_CONTAINER_PORT}
+        published: ${ARTEMIS_CONSOLE_HOST_PORT}
+        host_ip: ${ARTEMIS_CONSOLE_HOST_IP}
+        protocol: tcp
+        mode: host
+    volumes:
+      - artemis:/var/lib/artemis-instance
+    labels:
+      com.qlik.presales.description: "artemis server"
+      com.qlik.presales.author: "ed.ost@qlik.com"
+      com.qlik.presales.source: "https://hub.docker.com/r/apache/activemq-artemis"
+
+
+volumes:
+  artemis:
+    labels:
+      com.qlik.presales.description: "artemis data storage"
